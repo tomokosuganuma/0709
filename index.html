@@ -2,201 +2,209 @@
 <html lang="ja">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>勉強・課題Todoアプリ</title>
+  <meta charset="UTF-8">
+  <title>Todo App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;700&display=swap');
-
-    :root {
-      --color-bg: #ffffff;
-      --color-text: #1c2a39;
-      --color-accent: #2c3e50;
-      --color-lightgray: #f0f2f5;
-      --color-gray: #aaa;
-      --color-green-bg: #e6f4ea;
-      --color-complete: #d8e8dc;
-      --color-focus: #3b5998;
-      --color-dc7115: #00B8E6;
-      --color-dark-bg: #0A1A2F;
-      --color-dark-card: #122235;
-      --color-dark-btn: #1f3c56;
-      --color-dark-btn-hover: #275171;
-      --color-complete-button-dark: #00cc88;
-    }
-
-    body.light {
-      background-color: var(--color-bg);
-      color: var(--color-text);
-    }
-
-    body.dark {
-      background-color: var(--color-dark-bg);
-      color: #f1f1f1;
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .container {
-      max-width: 700px;
-      margin: auto;
-      padding: 2rem 1rem;
+      padding: 1rem;
+      max-width: 375px;
+      margin: 0 auto;
     }
 
-    h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
+    /* ----------------
+   カラーテーマ定義
+------------------ */
+    body.light {
+      background-color: #f7f7f7;
+      color: #222;
     }
 
+    body.dark {
+      background-color: #1E1E1E;
+      color: #FFFFFF;
+    }
+
+    /* ----------------
+   ヘッダー・ラベルなど
+------------------ */
+    h1,
     h2 {
+      font-weight: 700;
       font-size: 1.2rem;
-      font-weight: 400;
-      color: var(--color-gray);
-      margin-top: 2rem;
     }
 
+    body.dark h1,
+    body.dark h2 {
+      color: #FFFFFF;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    body.dark label {
+      color: #AAAAAA;
+    }
+
+    /* ----------------
+   入力欄・セレクト
+------------------ */
     input,
-    select,
-    textarea {
-      width: 100%;
+    select {
+      font-family: inherit;
+      font-size: 1rem;
+      margin: 0.5rem 0;
       padding: 0.75rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    input:focus,
-    textarea:focus {
-      border-color: var(--color-focus);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(59, 89, 152, 0.2);
-    }
-
-    ::placeholder {
-      color: var(--color-gray);
-    }
-
-    button {
-      padding: 0.75rem 1.25rem;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: 600;
-      background-color: var(--color-accent);
-      color: white;
-      transition: background-color 0.2s ease;
+      border-radius: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #fff;
+      color: #222;
     }
 
-    button:hover {
+    body.dark input,
+    body.dark select {
+      background-color: #282828;
+      color: #FFFFFF;
+    }
+
+    /* ----------------
+   共通ボタンスタイル
+------------------ */
+    button {
+      font-family: inherit;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    /* ライトモードボタン */
+    body.light button {
+      background-color: #2c3e50;
+      color: white;
+    }
+
+    body.light button:hover {
       background-color: #1c2a39;
     }
 
-    #modeToggleBtn {
-      background-color: #e0e7ef;
-      color: #2c3e50;
-      border: 1px solid #2c3e50;
-      font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 1.5rem;
-    }
-
-    #modeToggleBtn:hover {
-      background-color: #d4e0ed;
-    }
-
-    .task {
-      background-color: var(--color-lightgray);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s ease, opacity 0.3s ease;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .task.done {
-      background-color: var(--color-complete);
-    }
-
-    .task-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-
-    .complete-button {
-      background-color: #d4ff00;
+    /* ダークモードボタン */
+    body.dark button {
+      background-color: #445EE5;
       color: white;
     }
 
-    .complete-button:hover {
-      background-color: #218838;
+    body.dark button:hover {
+      background-color: #3a4edf;
     }
 
-    body.dark .complete-button {
-      background-color: #00B8E6;
-      color: #fff;
+    .task {
+      background-color: #fff;
+      color: #222;
+      padding: 1rem;
+      margin: 1rem auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      max-width: 330px;
+      width: 100%;
     }
 
-
-    body.dark .complete-button:hover {
-      background-color: #00b078;
+    body.dark .task {
+      background-color: #282828;
+      color: #FFFFFF;
     }
 
-    #timerPage {
-      padding: 2rem;
-      background-color: var(--color-lightgray);
-      min-height: 100vh;
-      display: none;
+    .task-buttons {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
     }
 
-    body.dark #timerPage {
-      background-color: var(--color-dark-bg);
-    }
-
-    #backBtn {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      background-color: #999;
+    .task-buttons button {
+      padding: 0.75rem;
+      font-size: 1rem;
       font-weight: bold;
+      border-radius: 13px;
+      flex: 1;
+    }
+
+    /* 完了ボタン（目立つブルー） */
+    body.light .task-buttons .complete-button {
+      background-color: #2c6bed;
+    }
+
+    body.dark .task-buttons .complete-button {
+      background-color: #01ae91;
+    }
+
+    body.dark .task-buttons .complete-button:hover {
+      background-color: #01927a;
+    }
+
+    /* 始めるボタン（中立グレー） */
+    body.light .task-buttons .start-button {
+      background-color: #2c3e50;
+    }
+
+    body.light .task-buttons .start-button:hover {
+      background-color: #1c2a39;
+    }
+
+    body.dark .task-buttons .start-button {
+      background-color: #3A3A3A;
+    }
+
+    body.dark .task-buttons .start-button:hover {
+      background-color: #555555;
     }
 
     .circle-timer-wrapper {
       position: relative;
-      width: 300px;
-      height: 300px;
+      width: 220px;
+      height: 220px;
       margin: 2rem auto;
     }
 
     .circle-timer {
+      transform: rotate(-90deg);
       width: 100%;
       height: 100%;
-      transform: rotate(-90deg);
+    }
+
+    .circle-timer circle {
+      fill: none;
+      stroke-width: 8;
     }
 
     .circle-timer .bg {
-      fill: none;
-      stroke: #ddd;
-      stroke-width: 10;
+      stroke: #ccc;
+    }
+
+    body.dark .circle-timer .bg {
+      stroke: #333333;
     }
 
     .circle-timer .progress {
-      fill: none;
-      stroke: var(--color-accent);
-      stroke-width: 10;
+      stroke: #445EE5;
       stroke-dasharray: 283;
-      stroke-dashoffset: 283;
+      stroke-dashoffset: 0;
       transition: stroke-dashoffset 1s linear;
     }
 
@@ -205,101 +213,78 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
-      font-size: 1.4rem;
-      line-height: 1.6;
-      font-weight: 600;
-      color: var(--color-accent);
-      white-space: pre-line;
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
+    body.dark .timer-text {
+      color: #FFFFFF;
+    }
+
+    #backBtn {
+      background-color: transparent;
+      color: #445EE5;
+      border: none;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: left;
+      display: inline-block;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    /* 戻るボタンの親を左寄せに */
+    #timerPage {
+      text-align: left;
+      padding: 1rem;
+    }
+
+
+    /* タイマーコントロール（完了・ストップ）の幅調整 */
     .timer-controls {
       display: flex;
       justify-content: center;
       gap: 1rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
+      margin-top: 1rem;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .timer-controls button {
+      width: 140px;
+      /* 幅を制限 */
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      background-color: #3A3A3A;
+      color: white;
+      border: none;
+      transition: background-color 0.2s;
     }
 
-    body.dark input,
-    body.dark textarea,
-    body.dark select {
-      background-color: #1c263b;
-      color: #f1f1f1;
-      border: 1px solid #3a4b6b;
+    .timer-controls button:hover {
+      background-color: #555555;
     }
 
-    body.dark input:focus,
-    body.dark textarea:focus,
-    body.dark select:focus {
-      border-color: #5b89ff;
-      box-shadow: 0 0 0 3px rgba(91, 137, 255, 0.3);
+
+    body.light .timer-controls button {
+      background-color: #2c3e50;
+      color: white;
     }
 
-    body.dark ::placeholder {
-      color: #888;
+    body.light .timer-controls button:hover {
+      background-color: #1c2a39;
     }
 
-    body.dark .task {
-      background-color: var(--color-dark-card);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    body.dark .timer-controls button {
+      background-color: #3A3A3A;
+      color: white;
     }
 
-    body.dark .task.done {
-      background-color: #2a4030;
-    }
-
-    body.dark button {
-      background-color: var(--color-dark-btn);
-      color: #fff;
-    }
-
-    body.dark button:hover {
-      background-color: var(--color-dark-btn-hover);
-    }
-
-    body.dark #modeToggleBtn {
-      background-color: #3a4b6b;
-      color: #fff;
-      border: 1px solid #f1f1f1;
-    }
-
-    body.dark #modeToggleBtn:hover {
-      background-color: #4d6187;
-    }
-
-    body.dark #backBtn {
-      background-color: #444;
-      color: #fff;
-    }
-
-    body.dark .timer-text {
-      color: var(--color-dc7115);
-    }
-
-    body.dark .circle-timer .progress {
-      stroke: var(--color-dc7115);
-    }
-
-    body.dark .circle-timer .bg {
-      stroke: #1c2a39;
+    body.dark .timer-controls button:hover {
+      background-color: #555555;
     }
   </style>
-
-
-
 </head>
 
 <body class="light">
@@ -308,8 +293,10 @@
     <div id="modeToggleWrapper">
       <button id="modeToggleBtn" onclick="toggleMode()">ダークモード</button>
     </div>
-    <input type="text" id="subject" placeholder="教科・科目名（例：英語）" />
-    <input type="text" id="taskName" placeholder="やること（例：単語復習）" />
+    <label for="subject">教科・科目名</label>
+    <input type="text" id="subject" placeholder="（例：英語）" />
+    <label for="taskName">やること</label>
+    <input type="text" id="taskName" placeholder="（例：単語復習）" />
     <label for="duration">目標時間</label>
     <select id="duration">
       <option value="30">30分</option>
@@ -330,9 +317,8 @@
     <div id="completedList"></div>
   </div>
 
-  <div id="timerPage">
+  <div id="timerPage" style="display:none">
     <button id="backBtn" onclick="goBack()">← 戻る</button>
-    <h2>タイマー画面</h2>
     <div class="circle-timer-wrapper">
       <svg class="circle-timer" viewBox="0 0 100 100">
         <circle class="bg" cx="50" cy="50" r="45"></circle>
@@ -379,7 +365,7 @@
       completedList.innerHTML = "";
       tasks.forEach((task, i) => {
         const div = document.createElement("div");
-        div.className = "task";
+        div.className = "task" + (task.done ? " done" : "");
 
         const info = document.createElement("ul");
         info.innerHTML = `
@@ -400,7 +386,7 @@
           completeBtn.onclick = () => markComplete(i);
 
           const startBtn = document.createElement("button");
-          startBtn.textContent = "今から始める";
+          startBtn.textContent = "始める";
           startBtn.onclick = () => startTimer(task.duration, i);
 
           const deleteBtn = document.createElement("button");
@@ -410,12 +396,22 @@
           buttonGroup.appendChild(completeBtn);
           buttonGroup.appendChild(startBtn);
           buttonGroup.appendChild(deleteBtn);
-
           div.appendChild(info);
           div.appendChild(buttonGroup);
           taskList.appendChild(div);
         } else {
+          const restoreBtn = document.createElement("button");
+          restoreBtn.textContent = "戻す";
+          restoreBtn.onclick = () => restoreTask(i);
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "削除";
+          deleteBtn.onclick = () => deleteTask(i);
+
+          buttonGroup.appendChild(restoreBtn);
+          buttonGroup.appendChild(deleteBtn);
           div.appendChild(info);
+          div.appendChild(buttonGroup);
           completedList.appendChild(div);
         }
       });
@@ -446,6 +442,11 @@
 
     function markComplete(index) {
       tasks[index].done = true;
+      loadTasks();
+    }
+
+    function restoreTask(index) {
+      tasks[index].done = false;
       loadTasks();
     }
 
@@ -512,3 +513,5 @@
     loadTasks();
   </script>
 </body>
+
+</html>
